@@ -1,3 +1,0 @@
-tail -n 100 -f /opt/tomcat_8888/logs/catalina.out
-
-/opt/tomcat_8888/webapps

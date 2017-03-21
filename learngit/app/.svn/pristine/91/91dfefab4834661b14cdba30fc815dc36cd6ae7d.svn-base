@@ -1,8 +1,0 @@
-// 查询资金明细
-select f from FundAccountFlow f where f.fundAccount.userId=?1 and f.fundAccount.type=?2
-
-// 查询用户Id
-select *from S61.T6110 where F02='chenxueneng9'
-
-// 查询资金明细
-select * from S61.T6102 a join S61.T6101 b on a.F02=b.F01 where b.F02=24 and b.F03='WLZH'
