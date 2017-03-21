@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+<title>善行创投</title>
+<%@ include file="/WEB-INF/views/public/common.jspf"%>
+<script type="text/javascript" src="${ctx}/js/qrcode.min.js"></script>
+</head>
+<body class="sx_aboutbg" style="background:#e6eef1;">
+<div id="sx_m_main">
+   <div class="sx_app_biz_box">
+      <h1>成功邀请好友投资，可获返利奖励！</h1>
+      <h2>1、这是您的专属推广码，请您邀请的好友在注册时输入：</h2>
+      <c:set scope="page" var="code" value="${not empty interiorCode?(interiorCode[1]== null?interiorCode[0]:interiorCode[1]):userExtendCode.myCode}"></c:set>
+      <p class="sx_app_biz_ma sx_app_f18">${code}</p>
+      <div id="qrcode" class="sx_app_biz_pic"></div><br />
+      <h2>2、这是您的专用邀请链接，请通过 QQ或邮箱 发送给好友：</h2>
+      <div class="sx_app_biz_textlink"><p id="content" >我在善行创投投资已获得了很高的收益，你也快来试试吧！http://www.myshanxing.com/pay/slaward.html?code=${code}</p></div> 
+   </div>
+</div>
+<script type="text/javascript">
+var linkUrl = "http://www.myshanxing.com/pay/slaward.html?code=${code}";
+new QRCode("qrcode", {text: linkUrl, width: 150, height: 150});
+$(function() {
+	initReady();
+});
+function initReady(){
+	if(typeof(window.slJSBridge) == 'object')
+		window.slJSBridge.share("推荐善行创投给你-享受安全高收益的理财", linkUrl, "http://www.myshanxing.com:8888/app/images/icon.png", "我在善行创投投资已获得了很高的收益，你也快来试试吧！",['weiXin','qq','sms','sina']);
+}
+</script>
+</body>
+</html>

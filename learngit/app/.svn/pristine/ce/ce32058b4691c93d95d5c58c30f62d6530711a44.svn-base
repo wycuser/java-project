@@ -1,0 +1,35 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>善行创投</title>
+<meta name="description" content="善行创投" />
+<meta name="keywords" content="善行创投" />
+<meta name="author" content="shanLin" />
+<meta name="copyright" content="ShanLin all Right Reserved" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<meta name="apple-touch-fullscreen" content="YES" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link href="../css/mobile.css" rel="stylesheet" type="text/css" media="screen">
+<link rel="shortcut icon" href="favicon.ico"/>
+<link rel="apple-touch-icon" href="icon.png"/>
+<link rel="apple-touch-icon" sizes="72×72" href="touch-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114×114" href="touch-icon-iphone4.png" />
+<style type="text/css">
+img { height: auto; width: auto; width:100%;}
+</style>
+</head>
+<body style="background:#FFFFFF;">
+<div id="sx_m_main">
+   <div class="sx_app_template">
+   <h3 class="sx_app_template_title">${requestScope.title}</h3>
+   <p style="text-align:right;"><fmt:formatDate value="${requestScope.lastUpdateTime}" pattern="yyyy-MM-dd"/></p>
+   ${requestScope.content}
+   </div>
+</div>
+</body>
+</html>

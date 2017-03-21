@@ -1,0 +1,6 @@
+user/capital/tradingRecord.action 资金明细接口
+amount
+
+account/creditorListV2.action
+type=1
+buyingPrice

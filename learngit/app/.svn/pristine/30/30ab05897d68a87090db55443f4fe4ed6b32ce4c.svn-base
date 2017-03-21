@@ -1,0 +1,11 @@
+sys.banner_url_suffix=http://test.myshanxing.com/fileStore
+sys.site_name=\u5584\u884C\u521B\u6295
+sys.service_phone=4000-166-277
+sys.aes_key=80e36e39f34e678c
+sys.min_invest_amount=100
+remote.api_url=http://192.168.3.189/shanlinclub/api.php
+remote.public_key=sadfddsfsdafx
+remote.invoke=true
+experience.add=false
+zqzr_cy_day=0
+environment=Server

@@ -1,0 +1,50 @@
+package com.shanlin.p2p.app.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+import com.shanlin.p2p.app.dao.BidDao;
+import com.shanlin.p2p.app.dao.CreditAssignmentApplyDao;
+import com.shanlin.p2p.app.dao.UserAccountDao;
+import com.shanlin.p2p.app.model.Bid;
+import com.shanlin.p2p.app.model.enums.BidStatus;
+import com.shanlin.p2p.app.model.enums.UserType;
+import com.shanlin.p2p.app.service.BidService;
+
+@Service
+@Transactional(readOnly=true)
+public class BidServiceImpl implements BidService {
+
+	@Resource
+	private BidDao bidDao;
+	
+	@Resource
+	private CreditAssignmentApplyDao applyDao;
+	
+	@Resource
+	private UserAccountDao userAccountDao;
+	
+	@Override
+	public List<Bid> findBidByType(UserType userType, Pageable pageable){
+		List<BidStatus> statusList = Lists.newArrayList(BidStatus.HKZ, BidStatus.TBZ, BidStatus.YFB, BidStatus.DFK, BidStatus.YJQ, BidStatus.YDF);
+		if(userType != null)
+			return bidDao.findSimpleBidByPageAndType(statusList, userType, pageable);
+		else
+			return bidDao.findSimpleBidByPage(statusList, pageable);
+	}
+
+	@Override
+	public boolean isSubscribers(Long bid,String investName) {
+		String result=bidDao.findInvestNameById(bid);
+		if(result!=null && !result.equals(investName))
+			return false;
+		return true;
+	}
+
+}

@@ -1,0 +1,14 @@
+package com.shanlin.p2p.app.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.shanlin.p2p.app.model.BankCard;
+import com.shanlin.p2p.app.model.enums.UseStatus;
+
+public interface BankCardDao extends JpaRepository<BankCard, Long> {
+
+	List<BankCard> findByUserIdAndStatus(Long userId, UseStatus status);
+	
+}

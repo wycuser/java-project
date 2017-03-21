@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>./logs/sl-app.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>./logs/sl-app.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="com.shanlin" level="DEBUG">
+	</logger>
+	
+	<!-- Application Loggers 
+	<logger name="org.application">
+		<level value="debug" />
+	</logger>
+	-->
+	
+	<!-- 3rdparty Loggers 
+	<logger name="org.springframework.core">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="org.hibernate">
+		<level value="WARN" />
+	</logger>
+	<logger name="org.springframework.data.jpa">
+		<level value="WARN" />
+	</logger>
+	<logger name="net.spy.memcached">
+		<level value="INFO" />
+	</logger>
+	<logger name="org.apache.cxf">
+		<level value="INFO" />
+	</logger>
+	-->
+	<!--log4jdbc -->
+	<logger name="jdbc.sqltiming" level="INFO" />
+	<logger name="jdbc.sqlonly" level="WARN" />
+	<logger name="jdbc.connection" level="WARN" />
+	<logger name="jdbc.audit" level="WARN" />
+	<logger name="jdbc.resultset" level="WARN" />
+	
+	<root level="INFO">
+		 <appender-ref ref="console" />
+		<!--
+		 -->
+		<appender-ref ref="rollingFile" />
+	</root>
+</configuration>

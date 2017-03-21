@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+         http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+         http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+         http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+
+	<bean id="logInbound" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+    <bean id="logOutbound" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
+    <cxf:bus>
+        <cxf:inInterceptors>
+            <ref bean="logInbound"/>
+        </cxf:inInterceptors>
+        <cxf:outInterceptors>
+            <ref bean="logOutbound"/>
+        </cxf:outInterceptors>
+        <cxf:outFaultInterceptors>
+            <ref bean="logOutbound"/>
+        </cxf:outFaultInterceptors>
+        <cxf:inFaultInterceptors>
+            <ref bean="logInbound"/>
+        </cxf:inFaultInterceptors>
+    </cxf:bus>
+	<!-- 方式一  jaxws:endpoint 方式二 jaxws:server-->
+	<jaxws:endpoint address="/testWebServiceWS" implementor="com.shanlin.p2p.app.ws.TestWebServiceImpl"></jaxws:endpoint>
+	
+	<jaxws:client id="soapPortService" serviceClass="com.shanlin.p2p.app.service.SoapPortService" 
+        address="http://192.168.3.70/shanlinhui/serverSoap.php">
+    </jaxws:client>
+</beans>

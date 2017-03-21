@@ -1,0 +1,44 @@
+package com.shanlin.framework.utils;
+
+import java.util.Date;
+
+public class FunctionUtil {
+	public static String getOutTradeNo(int type, Long outTradeNo,Date date){
+		String str = "";
+		if(date==null)
+			date=new Date();
+		String dt = DateParser.format(date, "yyyyMMddHHmmss");
+		if (0 == type) {
+			str = "jy_";
+		} else if (1 == type) {
+			str = "ch_";
+		} else if (2 == type) {
+			str = "tx_";
+		} else if (3 == type) {
+			str = "txfee_";
+		} else if (4 == type) {
+			str = "hk_";
+		} else if (5 == type) {
+			str = "hkfee_";
+		} else if (6 == type) {
+			str = "jyfee_";
+		} else if (7 == type) {
+			str = "zq_";
+		} else if (8 == type) {
+			str = "zqfee_";
+		} else if (9 == type) {
+			str = "chgtgfee_";
+		} else if (10 == type) {
+			str = "tztgfee_";
+		} else if (11 == type) {
+			str = "df_";
+		}else if (12 == type) {
+			str = "redp_";
+		}
+		str = str + outTradeNo + "_" + dt;
+		if (str.length() > 20) {
+			str = str.substring(0, 19);
+		}
+		return str;
+	}
+}

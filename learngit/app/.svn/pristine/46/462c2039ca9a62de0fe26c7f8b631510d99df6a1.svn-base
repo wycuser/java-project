@@ -1,0 +1,21 @@
+package com.shanlin.p2p.app.dao;
+
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+
+import com.shanlin.framework.persistence.BaseDao;
+import com.shanlin.p2p.app.model.Banner;
+
+public interface BannerDao extends BaseDao<Banner, Long> {
+	
+	@Query("select b from Banner b where b.type=1 and b.showTime < CURRENT_TIMESTAMP and b.unShowTime > CURRENT_TIMESTAMP order by b.sortIndex desc, b.lastUpdateTime desc")
+	List<Banner> findAllBanner(Pageable pageable);
+	
+	@Query("select b from Banner b where b.type=1 and b.showTime < CURRENT_TIMESTAMP and b.unShowTime > CURRENT_TIMESTAMP order by b.sortIndex, b.lastUpdateTime desc")
+	List<Banner> findAllBanner();
+	
+	@Query(value = "SELECT F02, F05, F06, F09 FROM S50.T5015 WHERE F01 = ? AND F04 = 'YFB' limit 1", nativeQuery = true)
+	Object[][] findWzggById(Long id);
+}

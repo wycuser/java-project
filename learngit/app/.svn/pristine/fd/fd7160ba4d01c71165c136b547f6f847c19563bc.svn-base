@@ -1,0 +1,6 @@
+// 获取回帐查询列表
+http://192.168.3.47:8080/app/account/backAccountList.action?userId=2&type=2&page=1&size=10
+
+// 获取单条回帐查询详情
+http://192.168.3.47:8080/app/account/backAccountDetail.action?userId=2&bidId=127&issue=10&creditId=113
+

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-4.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+           http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd">
+           
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="com.shanlin.p2p.app,com.shanlin.framework,com.shanlin.p2p.csai,com.shanlin.p2p.rotu,com.shanlin.p2p.jint">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+
+	<!-- 注解式事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<jpa:repositories base-package="com.shanlin.p2p.dao,com.shanlin.p2p.app.dao,com.shanlin.p2p.csai.dao,com.shanlin.p2p.rotu.dao,com.shanlin.p2p.jint.dao"
+		repository-impl-postfix="Impl" entity-manager-factory-ref="entityManagerFactory"
+		transaction-manager-ref="transactionManager"></jpa:repositories>
+	
+	<!-- Jpa Entity Manager 配置 -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+		<property name="dataSource" ref="dataSource"/>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="${db.showSql}" />
+				<property name="generateDdl" value="false" />
+				<property name="databasePlatform">
+					<bean factory-method="getDialect" class="com.shanlin.framework.persistence.JpaUtils">
+						<constructor-arg ref="dataSource"/>
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="packagesToScan" value="com.shanlin"/>
+	</bean>
+	<!-- local test环境 -->
+	<beans profile="test">
+		<bean id="propertyConfigurer" class="com.shanlin.framework.config.PropertyFileConfigurer">
+			<property name="locations">
+				<list>
+					<value>classpath*:db.develop.properties</value>
+					<value>classpath:config/appCheck.properties</value>
+					<value>classpath:config/resource.devel.properties</value>
+					<value>classpath*:config.develop.properties</value>
+					<value>classpath*:letter.develop.properties</value>
+				</list>
+			</property>
+			<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		</bean>
+
+		<!-- Tomcat JDBC连接池 -->
+		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+			destroy-method="close">
+			<property name="poolProperties">
+				<bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+					<property name="url" value="${db.p2p.url}" />
+					<property name="driverClassName" value="${db.driver}" />
+					<property name="username" value="${db.p2p.username}" />
+					<property name="password" value="${db.p2p.password}" />
+					<property name="testOnBorrow" value="${db.testOnBorrow}" />
+					<property name="testWhileIdle" value="${db.testWhileIdle}" />
+					<property name="validationQuery" value="${db.validationQuery}" />
+					<!-- 初始化连接:连接池启动时创建的初始化连接数量 -->
+					<property name="initialSize" value="${db.initialSize}" />
+					<!-- 连接池的最大数据库连接数。设为0表示无限制 -->
+					<property name="maxActive" value="${db.maxActive}" />
+					<!-- 连接池中容许保持空闲状态的最小连接数量,低于这个数量将创建新的连接 -->
+					<property name="minIdle" value="${db.minIdle}" />
+					<!-- 最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制 -->
+					<property name="maxWait" value="${db.maxWait}" />
+					<property name="validationInterval" value="${db.validationInterval}" />
+					<property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}" />
+					<!-- 超过removeAbandonedTimeout时间后，是否进 行没用连接（废弃）的回收（默认为false，调整为true) -->
+					<property name="removeAbandoned" value="${db.removeAbandoned}" />
+					<!-- 超过时间限制，回收没有用(废弃)的连接（默认为60） -->
+					<property name="removeAbandonedTimeout" value="${db.removeAbandonedTimeout}" />
+					<property name="logAbandoned" value="${db.logAbandoned}" />
+					<property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}" />
+				</bean>
+			</property>
+		</bean>
+	</beans>
+	<!-- 线上 production 环境 -->
+	<beans profile="production">
+		<bean id="propertyConfigurer" class="com.shanlin.framework.config.PropertyFileConfigurer">
+			<property name="locations">
+				<list>
+					<value>classpath:config/db.properties</value>
+					<value>classpath:config/appCheck.properties</value>
+					<value>classpath:config/resource.properties</value>
+					<value>/WEB-INF/config/config.properties</value>
+					<value>/WEB-INF/config/message.properties</value>
+				</list>
+			</property>
+			<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		</bean>
+		<!-- Tomcat JDBC连接池 -->
+		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+			destroy-method="close">
+			<property name="poolProperties">
+				<bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+					<property name="url" value="${db.p2p.url}" />
+					<property name="driverClassName" value="${db.driver}" />
+					<property name="username" value="${db.p2p.username}" />
+					<property name="password" value="${db.p2p.password}" />
+					<property name="testOnBorrow" value="${db.testOnBorrow}" />
+					<property name="testWhileIdle" value="${db.testWhileIdle}" />
+					<property name="validationQuery" value="${db.validationQuery}" />
+					<!-- 初始化连接:连接池启动时创建的初始化连接数量 -->
+					<property name="initialSize" value="${db.initialSize}" />
+					<!-- 连接池的最大数据库连接数。设为0表示无限制 -->
+					<property name="maxActive" value="${db.maxActive}" />
+					<!-- 连接池中容许保持空闲状态的最小连接数量,低于这个数量将创建新的连接 -->
+					<property name="minIdle" value="${db.minIdle}" />
+					<!-- 最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制 -->
+					<property name="maxWait" value="${db.maxWait}" />
+					<property name="validationInterval" value="${db.validationInterval}" />
+					<property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}" />
+					<!-- 超过removeAbandonedTimeout时间后，是否进 行没用连接（废弃）的回收（默认为false，调整为true) -->
+					<property name="removeAbandoned" value="${db.removeAbandoned}" />
+					<!-- 超过时间限制，回收没有用(废弃)的连接（默认为60） -->
+					<property name="removeAbandonedTimeout" value="${db.removeAbandonedTimeout}" />
+					<property name="logAbandoned" value="${db.logAbandoned}" />
+					<property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}" />
+				</bean>
+			</property>
+		</bean>
+	</beans>
+	<!-- 线上 development 环境 -->
+	<beans profile="development">
+		<bean id="propertyConfigurer" class="com.shanlin.framework.config.PropertyFileConfigurer">
+			<property name="locations">
+				<list>
+					<value>classpath:config/db.devel.properties</value>
+					<value>classpath:config/appCheck.properties</value>
+					<value>classpath:config/resource.devel.properties</value>
+					<value>/WEB-INF/config/config.devel.properties</value>
+					<value>/WEB-INF/config/message.properties</value>
+				</list>
+			</property>
+			<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		</bean>
+
+		<!-- Tomcat JDBC连接池 -->
+		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+			destroy-method="close">
+			<property name="poolProperties">
+				<bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+					<property name="url" value="${db.p2p.url}" />
+					<property name="driverClassName" value="${db.driver}" />
+					<property name="username" value="${db.p2p.username}" />
+					<property name="password" value="${db.p2p.password}" />
+				</bean>
+			</property>
+		</bean>
+	</beans>
+</beans>

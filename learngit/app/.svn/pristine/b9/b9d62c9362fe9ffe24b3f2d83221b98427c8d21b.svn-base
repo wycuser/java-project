@@ -1,0 +1,11 @@
+解压如:
+ps -ef | grep /opt/tomcat_8080
+/opt/tomcat_8080/bin/startup.sh & tail -n 100 -f /opt/tomcat_8080/logs/catalina.out
+unzip -o /home/webapps/p2p/front/current/WEB-INF/classes.zip -d /home/webapps/p2p/front/current/WEB-INF
+
+进入如:
+cd /home/webapps/p2p/front/current/WEB-INF/
+cd /home/webapps/p2p/front/current/WEB-INF/pages/mobile
+
+删除如:
+rm -rf /home/webapps/p2p/front/current/WEB-INF/classes.zip
